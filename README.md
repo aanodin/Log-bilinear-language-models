@@ -4,9 +4,9 @@ lbl: the original version <br>
 hlbl: a hierachical version with huffman tree <br>
 lbl_mp: lbl with multiprocessing and cythonised training  <br>
 setup: used to compile the extension module <br>
-============================
-Installation
 
+Installation
+============================
 1. Clone the repository
 git clone https://github.com/aanodin/Log-bilinear-language-models
 
@@ -28,5 +28,4 @@ sudo rm /var/swap.1
 cd Log-bilinear-language-models
 python setup.py install
 
-4. import scipy.linalg.blas as fblas
 
