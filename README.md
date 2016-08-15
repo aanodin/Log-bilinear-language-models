@@ -11,16 +11,15 @@ Installation
 git clone https://github.com/aanodin/Log-bilinear-language-models <br>
 
 2. Install Python 2.7 and dependencies <br>
-sudo aptitude install libatlas-base-dev gfortran python python-dev build-essential g++ <br> <br>
+sudo aptitude install libatlas-base-dev gfortran python python-dev build-essential g++ <br>
 
+3. Install Python modules <br>
 sudo /bin/dd if=/dev/zero of=/var/swap.1 bs=1M count=1024<br>
 sudo /sbin/mkswap /var/swap.1<br>
 sudo /sbin/swapon /var/swap.1<br>
-
 sudo pip install numpy<br>
 sudo pip install scipy<br>
 pip install cython<br>
-
 sudo swapoff /var/swap.1<br>
 sudo rm /var/swap.1<br>
 
