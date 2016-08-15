@@ -7,7 +7,7 @@ cimport numpy as np
 
 from libc.math cimport exp
 from libc.string cimport memset
-from scipy.linalg.blas import fblas
+from scipy.linalg.blas import blas as fblas
 
 INT32 = np.int32
 ctypedef np.int32_t INT32_t
