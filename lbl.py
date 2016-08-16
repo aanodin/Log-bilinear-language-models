@@ -57,8 +57,8 @@ class LBL:
 
     def initialise(self):
         print('Initialising weights...')
-        self.contextW = [(np.random.rand(self.dim, self.dim).astypes(np.float32) - 0.5) / self.dim for i in range(self.context) ]
-        self.wordEm = (np.random.rand(len(self.vocab), self.dim).astypes(np.float32) - 0.5) / self.dim
+        self.contextW = [(np.random.rand(self.dim, self.dim).astype(np.float32) - 0.5) / self.dim for i in range(self.context) ]
+        self.wordEm = (np.random.rand(len(self.vocab), self.dim).astype(np.float32) - 0.5) / self.dim
         self.biases = np.asarray(self.frequencies, np.float32) / np.sum(self.frequencies)
         
 
@@ -94,7 +94,7 @@ class LBL:
         index += 1
         self.vocab['</s>'] = index
         self.index2word.extend(['<>', '<s>', '</s>'])
-        self.frequencies.extend([count_OOV, sen_no, sen_no] )
+        self.frequencies.extend([count_oov, sen_no, sen_no] )
         print('\nThe size of vocabulary is: {0}, with threshold being {1}\n'.format(len(self.vocab), self.threshold) )
 
 
