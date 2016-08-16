@@ -42,7 +42,7 @@ Usage
 ```
 python main.py --train input.txt
 ```
-This will save the model into lbl.hdf5 file
+This will save the model into lbl.hdf5 file<br>
 2. Evaluate other (or the same :)) file:
 ```
 python main.py --ppl input.txt --net lbl.hdf5
