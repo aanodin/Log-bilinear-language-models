@@ -49,7 +49,7 @@ class HLBL:
             self.train(sentences, alpha = alpha, min_alpha = min_alpha)
 
 
-    def save(self, filename='lbl.hdf5'):
+    def save(self, filename):
         print('Saving model...')
         pickle.dump(self.vocab, open('hlbl_tree.p', 'wb') )
         f = h5py.File(filename, 'w')

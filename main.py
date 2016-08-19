@@ -42,7 +42,7 @@ if __name__ == "__main__":
 	# training arguments
 	parser.add_argument("--train", default=None,
 						help="Train text file")
-	parser.add_argument("--save-net", default=None, dest="save_net",
+	parser.add_argument("--save-net", default="lbl.hdf5", dest="save_net",
 						help="File to save trained model")
 
 	# evaluating arguments
