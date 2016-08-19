@@ -186,8 +186,11 @@ class LBL:
             self.wordEm -= (delta_r + 1e-4 * self.wordEm) * alpha
         print('Training is finished!')
 
-                
-    def perplexity(self, sentences):
+
+    def perplexity(self, sentences, arpalm=None, weight=None):
+        LOG10TOLOG = np.log(10)
+        LOGTOLOG10 = 1. / LOG10TOLOG
+
         print('Calculating perplexity...')
         RARE = self.vocab['<>']
         # _no_eos means no end of sentence tag </s>
@@ -195,8 +198,9 @@ class LBL:
         logProbs_no_eos = logProbs = 0
         r_hat = np.zeros(self.dim, np.float32)
         for sentence in sentences:
+            original_sentence = sentence
             sentence = self.l_pad + sentence + self.r_pad
-            for pos in range(self.context, len(sentence) ):
+            for pos in range(self.context, len(sentence)):
                 count += 1
                 count_no_eos += 1
                 r_hat.fill(0)
@@ -210,6 +214,10 @@ class LBL:
                 w_index = self.vocab.get(sentence[pos], RARE)
                 energy = np.exp(np.dot(self.wordEm, r_hat) + self.biases)
                 res = np.log(energy[w_index] / np.sum(energy) )
+                if arpalm and weight:
+                    arpa_prob = LOGTOLOG10 * arpalm.prob_list(original_sentence)
+                    res = res * (1.0 - weight) + arpa_prob * weight
+
                 logProbs += res
                 logProbs_no_eos += res
             logProbs_no_eos -= res

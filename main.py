@@ -1,6 +1,6 @@
 import argparse
 import re
-
+import ArpaLM
 
 def tokenize(filename):	
 	file = open(filename).read()
@@ -30,11 +30,12 @@ def train(alg, filename, save_net):
 		lm.save(save_net)
 
 
-def evaluate(alg, filename, net):
+def evaluate(alg, filename, net, arpa=None, weight=0):
 	sentences = tokenize(filename)
 	lm = create_alg(alg)
 	lm.load(net)
-	lm.perplexity(sentences)
+
+	lm.perplexity(sentences, arpa, weight)
 
 
 if __name__ == "__main__":
@@ -50,6 +51,8 @@ if __name__ == "__main__":
 						help="Computes PPL of net on text file (if we train, do that after training)")
 	parser.add_argument("--net", default=None,
 						help="Net file to load")
+	parser.add_argument("--arpa", metavar="FILE weight", default=None, nargs=2,
+						help="ARPA n-gram model with interpolating, weight as second parameter")
 
 	# common
 	parser.add_argument("--alg", default="LBL", choices=["LBL", "HLBL", "LBL_MP"],
@@ -63,4 +66,9 @@ if __name__ == "__main__":
 
 	if args.ppl and args.net:
 		print("{0} algorithm evaluating".format(args.alg))
-		evaluate(args.alg, args.ppl, args.net)
+		if args.arpa:
+			arpalm = ArpaLM.ArpaLM(args.arpa[0])
+			weight = float(args.arpa[1])
+			evaluate(args.alg, args.ppl, args.net, arpalm, weight)
+		else:
+			evaluate(args.alg, args.ppl, args.net)

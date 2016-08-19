@@ -209,13 +209,17 @@ class HLBL:
         print('Training is finished!')
 
 
-    def perplexity(self, sentences):
+    def perplexity(self, sentences, arpalm=None, weight=None):
+        LOG10TOLOG = np.log(10)
+        LOGTOLOG10 = 1. / LOG10TOLOG
+
         print('Calculating perplexity...')
         RARE = self.vocab['<>']
         # _no_eos means no end of sentence tag </s>
         count_no_eos = count = 0
         logProbs_no_eos = logProbs = 0
         for sentence in sentences:
+            original_sentence = sentence
             sentence = self.l_pad + sentence + self.r_pad
             for pos in range(self.context, len(sentence) ):
                 count += 1
@@ -233,6 +237,10 @@ class HLBL:
                 for i in f:
                     prob *= i
                 res = np.log(prob)
+                if arpalm and weight:
+                    arpa_prob = LOGTOLOG10 * arpalm.prob_list(original_sentence)
+                    res = res * (1.0 - weight) + arpa_prob * weight
+
                 logProbs += res
                 logProbs_no_eos += res
             logProbs_no_eos -= res
