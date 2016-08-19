@@ -86,12 +86,11 @@ class LBL:
             self.prepare_vocabulary(sentences)
             self.initialise()
             self.train(sentences, alpha = alpha, min_alpha = min_alpha, batches = batches, workers = workers)
-            self.save()
             
 
-    def save(self):
+    def save(self, filename='lbl.hdf5'):
         print('Saving model...')
-        f = h5py.File('lbl.hdf5', 'w')
+        f = h5py.File(filename, 'w')
         f.create_dataset('index2word', data = self.index2word)
         f.create_dataset('wordEm', data = self .wordEm)
         f.create_dataset('contextW', data = self.contextW)

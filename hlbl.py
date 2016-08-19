@@ -46,14 +46,13 @@ class HLBL:
         if sentences is not None:
             self.prepare_vocabulary(sentences)
             self.initialise()
-            self.train(alpha = alpha, min_alpha = min_alpha, sentences)
-            self.save()
+            self.train(sentences, alpha = alpha, min_alpha = min_alpha)
 
 
-    def save(self):
+    def save(self, filename='lbl.hdf5'):
         print('Saving model...')
         pickle.dump(self.vocab, open('hlbl_tree.p', 'wb') )
-        f = h5py.File('hlbl.hdf5', 'w')
+        f = h5py.File(filename, 'w')
         f.create_dataset('index2word', data = self.index2word)
         f.create_dataset('wordEm', data = self .wordEm)
         f.create_dataset('contextW', data = self.contextW)
