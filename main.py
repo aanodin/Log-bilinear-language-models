@@ -1,5 +1,6 @@
 import argparse
 import re
+import copy
 import ArpaLM
 
 def tokenize(filename):	
@@ -30,12 +31,12 @@ def train(alg, filename, save_net):
 		lm.save(save_net)
 
 
-def evaluate(alg, filename, net, arpa=None, weight=0):
+def evaluate(alg, filename, net, arpa=None, weight=0, new_lm=None):
 	sentences = tokenize(filename)
 	lm = create_alg(alg)
 	lm.load(net)
 
-	lm.perplexity(sentences, arpa, weight)
+	lm.perplexity(sentences, arpa, weight, new_lm)
 
 
 if __name__ == "__main__":
@@ -53,6 +54,9 @@ if __name__ == "__main__":
 						help="Net file to load")
 	parser.add_argument("--arpa", metavar="FILE weight", default=None, nargs=2,
 						help="ARPA n-gram model with interpolating, weight as second parameter")
+	parser.add_argument('--save-lm', dest='save_lm', metavar="FILE", default=None,
+						help='Saves fixed ARPA language model to file')
+
 
 	# common
 	parser.add_argument("--alg", default="LBL", choices=["LBL", "HLBL", "LBL_MP"],
@@ -66,9 +70,16 @@ if __name__ == "__main__":
 
 	if args.ppl and args.net:
 		print("{0} algorithm evaluating".format(args.alg))
-		if args.arpa:
+		if args.arpa is not None:
 			arpalm = ArpaLM.ArpaLM(args.arpa[0])
 			weight = float(args.arpa[1])
-			evaluate(args.alg, args.ppl, args.net, arpalm, weight)
+			new_lm = None
+			if args.save_lm is not None:
+				new_lm = copy.deepcopy(arpalm)
+
+			evaluate(args.alg, args.ppl, args.net, arpalm, weight, new_lm)
+			if args.save_lm is not None:
+				new_lm.save(args.save_lm)
+
 		else:
 			evaluate(args.alg, args.ppl, args.net)

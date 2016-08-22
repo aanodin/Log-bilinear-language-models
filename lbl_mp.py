@@ -264,7 +264,7 @@ class LBL:
 
 
                 
-    def perplexity(self, sentences, arpalm=None, weight=None):
+    def perplexity(self, sentences, arpalm=None, weight=None, new_lm=None):
         LOG10TOLOG = np.log(10)
         LOGTOLOG10 = 1. / LOG10TOLOG
 
@@ -275,7 +275,7 @@ class LBL:
         count_no_eos = count = 0
         logProbs_no_eos = logProbs = 0
         for sentence in sentences:
-            original_sentence = sentence
+            arpa_sentence = list(reversed(sentence))
             sentence = self.l_pad + sentence + self.r_pad
             sentence = map(lambda w: -1 if w == '<_>' else self.vocab.get(w, RARE), sentence)
             for pos in range(self.context, len(sentence) ):
@@ -292,8 +292,11 @@ class LBL:
                 energy = np.exp(np.dot(self.wordEm, r_hat) + self.biases)
                 res = np.log(energy[w_index] / np.sum(energy) )
                 if arpalm and weight:
-                    arpa_prob = LOGTOLOG10 * arpalm.prob_list(original_sentence)
+                    arpa_prob = LOGTOLOG10 * arpalm.prob_list(arpa_sentence)
                     res = res * (1.0 - weight) + arpa_prob * weight
+                    if new_lm is not None:
+                        new_lm.update_prob_list(res, arpa_sentence)
+
                 logProbs += res
                 logProbs_no_eos += res
             logProbs_no_eos -= res

@@ -310,6 +310,10 @@ class ArpaLM(object):
 		return p * self.lw + self.log_wip
 
 	def update_prob(self, new_prob, *syms):
+		syms = syms[0: min(len(syms), self.n)]
+		return self.update_prob_list(new_prob, syms)
+
+	def update_prob_list(self, new_prob, syms):
 		"""
 		Updates the probability of given n-gram in the model
 		Processing is mostly like prob() method
