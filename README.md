@@ -50,4 +50,8 @@ Usage
   ```
   python main.py --ppl input.txt --net network.hdf5 --arpa ClarinLM.lm.1 0.2
   ```
+  4. Evaluate using ARPA language model and save new model:<br>
+  ```
+  python main.py --ppl input.txt --net network.hdf5 --arpa ClarinLM.lm.1 0.2 --save-lm newClarinLM.lm.1
+  ```
 
