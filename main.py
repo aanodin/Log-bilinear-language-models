@@ -34,7 +34,10 @@ def train(alg, filename, save_net):
 def evaluate(alg, filename, net, arpa=None, weight=0, new_lm=None):
 	sentences = tokenize(filename)
 	lm = create_alg(alg)
-	lm.load(net)
+	if alg == "HLBL":
+		lm.load(name2=net)
+	else:
+		lm.load(net)
 
 	lm.perplexity(sentences, arpa, weight, new_lm)
 
